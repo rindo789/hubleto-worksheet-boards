@@ -1,0 +1,11 @@
+{
+    "name": "rindo789/hubleto-worksheet-boards",
+    "license": "MIT",
+    "description": "Worksheet dashboards for HubletoApp",
+    "autoload": {
+        "psr-4": {
+            "HubletoApp\\External\\Rindo789\\WorksheetDashboard\\": "src"
+        }
+    },
+    "minimum-stability": "dev"
+}
