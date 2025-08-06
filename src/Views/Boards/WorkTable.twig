@@ -1,0 +1,24 @@
+<div>
+  <table class="hubleto component table" style="min-width: 500px;">
+    <tr>
+      <th style="width: 100px;">Date</th>
+      <th>Worked Hours</th>
+    </tr>
+    {% for key, work in viewParams.workDays %}
+    <tr>
+      <td>{{ key|date("d. m. Y") }}</td>
+      <td>
+        <div class="flex">
+          {% if work.fullFilled > 0 %}
+            <div class="px-1" style="background-color: #4780bf;width: {{ work.fullFilled }}%; color: white;"> {{ work.hours }} h</div>
+          {% endif %}
+          {% if work.fullFilled < 100 %}
+            <div class="px-1" style="background-color: #e5e5e5;width: {{ 100 - work.fullFilled }}%; color: black;">{{ viewParams.quota - work.hours }} h</div>
+          {% endif %}
+          </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+</div>

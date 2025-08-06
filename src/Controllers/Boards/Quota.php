@@ -11,14 +11,16 @@ class Quota extends \HubletoMain\Controller
   public function prepareView(): void
   {
     parent::prepareView();
+    $quota = $this->main->urlParamAsFloat("quota") > 0 ? $this->main->urlParamAsFloat("quota") : 8;
 
     $workedHours = 0.00;
 
     $mTasks = new Activity($this->main);
     $usersWorktimes = $mTasks->record->prepareReadQuery()
-      ->where("datetime_created", date("Y-m-d"))
+      ->select("duration")
+      ->where("date_worked", "=", date("Y-m-d"))
       ->where("id_worker", $this->main->auth->getUserId())
-      ->get("duration")
+      ->get()
       ->toArray()
     ;
 
@@ -26,10 +28,10 @@ class Quota extends \HubletoMain\Controller
       $workedHours += (float) $worktime["duration"];
     }
 
-    $this->viewParams["quota"] = 8;
+    $this->viewParams["quota"] = $quota;
     $this->viewParams["workedHours"] = $workedHours;
 
-    $this->setView('@HubletoApp:Community:Worksheets/Boards/Quota.twig');
+    $this->setView('@HubletoApp:External:Rindo789:WorksheetDashboard/Boards/Quota.twig');
   }
 
 }
