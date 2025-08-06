@@ -1,20 +1,20 @@
 <?php
 
-namespace HubletoApp\External\WaiBlue\HelloWorld\Controllers;
+namespace HubletoApp\External\Rindo789\WorksheetDashboard\Controllers;
 
 class Home extends \HubletoMain\Controller
 {
   public function getBreadcrumbs(): array
   {
     return array_merge(parent::getBreadcrumbs(), [
-      [ 'url' => 'hello-world', 'content' => $this->translate('Hello World') ],
+      [ 'url' => 'worksheet-dashboards', 'content' => $this->translate('Hello World') ],
     ]);
   }
 
   public function prepareView(): void
   {
     parent::prepareView();
-    $this->setView('@HubletoApp:External:WaiBlue:HelloWorld/Home.twig');
+    $this->setView('@HubletoApp:External:Rindo789:WorksheetDashboard/Home.twig');
   }
 
 }

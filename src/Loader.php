@@ -1,6 +1,6 @@
 <?php
 
-namespace HubletoApp\External\WaiBlue\HelloWorld;
+namespace HubletoApp\External\Rindo789\WorksheetDashboard;
 
 class Loader extends \Hubleto\Framework\App
 {
@@ -9,7 +9,7 @@ class Loader extends \Hubleto\Framework\App
   public function init(): void
   {
     parent::init();
-    $this->main->router->httpGet([ '/^hello-world\/?$/' => Controllers\Home::class ]);
+    $this->main->router->httpGet([ '/^worksheet-dashboards\/?$/' => Controllers\Home::class ]);
   }
 
 }
