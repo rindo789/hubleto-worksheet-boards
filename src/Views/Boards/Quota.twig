@@ -1,0 +1,5 @@
+<div>
+ <span>{{ translate("You have worked") }}</span>
+ <h2>{{ viewParams.workedHours }} {{ translate("h out of ")}} {{ viewParams.quota }}</h2>
+ <span>{{ translate("You still need to work") }} {{(viewParams.quota - viewParams.workedHours)}} {{ translate("hours") }} </span>
+</div>
