@@ -2,7 +2,7 @@
 
 namespace HubletoApp\External\Rindo789\WorksheetDashboard;
 
-class Loader extends \Hubleto\Framework\App
+class Loader extends \HubletoMain\App
 {
   public bool $permittedForAllUsers = true;
 
@@ -14,9 +14,10 @@ class Loader extends \Hubleto\Framework\App
       '/^worksheets\/boards\/quota\/?$/' => Controllers\Boards\Quota::class,
       '/^worksheets\/boards\/work-table\/?$/' => Controllers\Boards\WorkTable::class,
       '/^worksheets\/boards\/hours-by-month\/?$/' => Controllers\Boards\HoursByMonth::class,
+      '/^worksheets\/boards\/my-tasks\/?$/' => Controllers\Boards\MyTasks::class,
     ]);
 
-    $dashboardsApp = $this->main->apps->community('Dashboards');
+    $dashboardsApp = $this->main->load(\HubletoApp\Community\Dashboards\Manager::class);
     if ($dashboardsApp) {
       $dashboardsApp->addBoard(
         $this,
@@ -32,6 +33,11 @@ class Loader extends \Hubleto\Framework\App
         $this,
         $this->translate('Hours by Month'),
         'worksheets/boards/hours-by-month'
+      );
+      $dashboardsApp->addBoard(
+        $this,
+        $this->translate('My Tasks'),
+        'worksheets/boards/my-tasks'
       );
     }
   }
