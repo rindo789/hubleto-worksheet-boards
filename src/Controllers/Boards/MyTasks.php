@@ -26,7 +26,7 @@ class MyTasks extends \HubletoMain\Controller
       )
       ->selectRAW("(select sum(ifnull(duration, 0)) from ".$mActivity->getFullTableSqlName()." where id_task = tasks.id) as worked")
       ->where("id_developer",$this->main->auth->getUserId())
-      ->where("id_developer",$this->main->auth->getUserId())
+      ->where("id_tester",$this->main->auth->getUserId())
       ->where("is_closed",false)
       ->join(
         $mPipelineSteps->getFullTableSqlName(),

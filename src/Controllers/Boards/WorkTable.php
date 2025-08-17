@@ -15,14 +15,24 @@ class WorkTable extends \HubletoMain\Controller
     $quota = $this->main->urlParamAsFloat("quota") > 0 ? $this->main->urlParamAsFloat("quota") : 8;
     $dateStart = !empty($this->main->urlParamAsString("dateStart")) ? $this->main->urlParamAsString("dateStart") : date("Y-m-d", strtotime("-1 month"));
     $today = date("Y-m-d");
-    $dateCounter = date("Y-m-d", strtotime($dateStart));
 
-    $sortedWorkDays = [];
-    $sortedWorkDays[$dateCounter]["hours"] = 0;
+    //inicialize today
+    $dayStr = date("D", strtotime($today));
+    $year = date("Y", strtotime($today));
+    $month = date("F", strtotime($today));
+    $dateCounter = date("Y-m-d", strtotime($today));
 
-    while ($today != $dateCounter) {
-      $dateCounter = date("Y-m-d", strtotime("+1 day", strtotime($dateCounter)));
-      $sortedWorkDays[$dateCounter]["hours"] = 0;
+    $sortedWorkDays[$year][$month][$dateCounter]["hours"] = 0;
+    if ($dayStr == "Sat" || $dayStr == "Sun") $sortedWorkDays[$year][$month][$dateCounter]["weekend"] = true;
+
+    while ($dateStart != $dateCounter) {
+      $dayStr = date("D", strtotime("-1 day", strtotime($dateCounter)));
+      $year = date("Y", strtotime("-1 day", strtotime($dateCounter)));
+      $month = date("F", strtotime("-1 day", strtotime($dateCounter)));
+      $dateCounter = date("Y-m-d", strtotime("-1 day", strtotime($dateCounter)));
+
+      if ($dayStr == "Sat" || $dayStr == "Sun") $sortedWorkDays[$year][$month][$dateCounter]["weekend"] = true;
+      $sortedWorkDays[$year][$month][$dateCounter]["hours"] = 0;
     }
 
     $mTasks = new Activity($this->main);
@@ -35,19 +45,18 @@ class WorkTable extends \HubletoMain\Controller
     ;
 
     foreach ($usersWorktimes as $workTime) {
+      $year = date("Y", strtotime($workTime["date_worked"]));
+      $month = date("F", strtotime($workTime["date_worked"]));
       $date = date("Y-m-d", strtotime($workTime["date_worked"]));
-      if (isset($sortedWorkDays[$date]["hours"])) {
-        $sortedWorkDays[$date]["hours"] += (float) $workTime["duration"];
+
+      if (isset($sortedWorkDays[$year][$month][$date]["hours"])) {
+        $sortedWorkDays[$year][$month][$date]["hours"] += (float) $workTime["duration"];
       } else {
-        $sortedWorkDays[$date]["hours"] = (float) $workTime["duration"];
+        $sortedWorkDays[$year][$month][$date]["hours"] = (float) $workTime["duration"];
       }
     }
 
-    foreach ($sortedWorkDays as $date => $workDay) {
-      $sortedWorkDays[$date]["fullFilled"] = ($workDay["hours"] / $quota) * 100;
-    }
-
-    $this->viewParams["workDays"] = array_reverse($sortedWorkDays);
+    $this->viewParams["worksheet"] = $sortedWorkDays;
     $this->viewParams["quota"] = $quota;
     $this->setView('@HubletoApp:External:Rindo789:WorksheetDashboard/Boards/WorkTable.twig');
   }

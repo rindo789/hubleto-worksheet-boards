@@ -1,24 +1,40 @@
-<div>
-  <table class="hubleto component table" style="min-width: 500px;">
-    <tr>
-      <th style="width: 100px;">Date</th>
-      <th>Worked Hours</th>
-    </tr>
-    {% for key, work in viewParams.workDays %}
-    <tr>
-      <td>{{ key|date("d. m. Y") }}</td>
-      <td>
-        <div class="flex">
-          {% if work.fullFilled > 0 %}
-            <div class="px-1" style="background-color: #4780bf;width: {{ work.fullFilled }}%; color: white;"> {{ work.hours }} h</div>
-          {% endif %}
-          {% if work.fullFilled < 100 %}
-            <div class="px-1" style="background-color: #e5e5e5;width: {{ 100 - work.fullFilled }}%; color: black;">{{ viewParams.quota - work.hours }} h</div>
-          {% endif %}
-          </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-
-</div>
+{% for year, months in viewParams.worksheet %}
+  {% for month, days in months %}
+    <div class="card m-1 mb-2">
+      <h2 class="p-2">{{ month ~ " " ~ year }}</h2>
+      <table class="hubleto component table" style="min-width: 500px;">
+        <tr>
+          <th style="width: 100px;">Date</th>
+          <th>Worked Hours</th>
+        </tr>
+        {% for day, dayInfo in days %}
+          <tr {% if dayInfo.weekend == true %} style="background-color: #e5e5e5;" {% endif %}>
+            <td>{{ day|date("d. m. Y") }}</td>
+            <td>
+              <div class="flex">
+                {% if ((dayInfo.hours / viewParams.quota) * 100) > 0 %}
+                  <div class="px-1" style="
+                    width: {{ ((dayInfo.hours / viewParams.quota) * 100) }}%;
+                    {% if dayInfo.weekend == true %}
+                      background-color: #41c50d;
+                    {% else %}
+                      background-color: #4780bf;
+                    {% endif %}
+                    color: white;"
+                  > {{ dayInfo.hours }} h</div>
+                {% endif %}
+                {% if ((dayInfo.hours / viewParams.quota) * 100) < 100 %}
+                  <div class="px-1" style="
+                    width: {{ 100 - ((dayInfo.hours / viewParams.quota) * 100) }}%;
+                    background-color: #e5e5e5;
+                    color: black;"
+                  >{{ viewParams.quota - dayInfo.hours }} h</div>
+                {% endif %}
+                </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  {% endfor %}
+{% endfor %}
