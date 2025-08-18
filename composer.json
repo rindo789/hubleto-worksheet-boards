@@ -1,5 +1,6 @@
 {
     "name": "rindo789/hubleto-worksheet-boards",
+    "version": "1.2",
     "license": "MIT",
     "description": "Worksheet dashboards for HubletoApp",
     "autoload": {

@@ -5,6 +5,7 @@ It adds multiple new panels to the Dashboard app to choose from.
 
 - [Worksheet dashboards for Hubleto](#worksheet-dashboards-for-hubleto)
   - [Required apps](#required-apps)
+  - [Installation](#installation)
   - [Available panels](#available-panels)
     - [Quota for today](#quota-for-today)
       - [Configuration](#configuration)
@@ -17,11 +18,25 @@ It adds multiple new panels to the Dashboard app to choose from.
 
 ## Required apps
 
+These apps are required for the panels to work.
+
 | App                             |
 | ------------------------------- |
 | HubletoApp\Community\Worksheets |
 | HubletoApp\Community\Pipeline   |
 | HubletoApp\Community\Tasks      |
+
+## Installation
+
+1. In your project write this command in your terminal:
+
+   `composer require rindo789/hubleto-worksheet-boards`
+
+2. In Hubleto Maintenance > Settings > Manage apps search for "Worksheet".
+   ![alt text](readme/install.png)
+3. Click "Install" in the "Worksheet Dashboards" app.
+   ![alt text](readme/search.png)
+4. Installation done! Now you can add the new panels in your dashboard.
 
 ## Available panels
 
