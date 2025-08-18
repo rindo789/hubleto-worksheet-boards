@@ -7,7 +7,7 @@
             "HubletoApp\\External\\Rindo789\\WorksheetDashboard\\": "src"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require-dev": {
         "hubleto/apps": "dev-main",
         "hubleto/main": "dev-main",
