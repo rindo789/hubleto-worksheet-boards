@@ -13,8 +13,9 @@ class WorkTable extends \HubletoMain\Controller
     parent::prepareView();
 
     $quota = $this->main->urlParamAsFloat("quota") > 0 ? $this->main->urlParamAsFloat("quota") : 8;
-    $dateStart = !empty($this->main->urlParamAsString("dateStart")) ? $this->main->urlParamAsString("dateStart") : date("Y-m-d", strtotime("-1 month"));
+    $range = $this->main->urlParamAsInteger("range") > 0 ? $this->main->urlParamAsInteger("range") : 30;
     $today = date("Y-m-d");
+    $dateStart = date("Y-m-d", strtotime("-".$range." days", strtotime($today)));
 
     //inicialize today
     $dayStr = date("D", strtotime($today));
