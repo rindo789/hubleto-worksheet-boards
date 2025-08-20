@@ -2,6 +2,7 @@
 
 namespace HubletoApp\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 
+use HubletoApp\Community\Settings\Models\User;
 use HubletoApp\Community\Worksheets\Models\Activity;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -12,6 +13,9 @@ class HoursByMonth extends \HubletoMain\Controller
   public function prepareView(): void
   {
     parent::prepareView();
+
+    $employeeEmail = $this->main->urlParamAsString("employeeEmail") != "" ? $this->main->urlParamAsString("employeeEmail") : null;
+
     $sortedMonths = [
       1 => ["title" => "January", "value" => null],
       2 => ["title" => "February", "value" => null],
@@ -31,11 +35,29 @@ class HoursByMonth extends \HubletoMain\Controller
     $usersWorktimes = $mTasks->record->prepareReadQuery()
       ->select(DB::raw("MONTH(date_worked) as month"), DB::raw("SUM(duration) as duration"))
       ->where(DB::raw("YEAR(date_worked)"), date("Y"))
-      ->where("id_worker", $this->main->auth->getUserId())
       ->groupBy(DB::raw("MONTH(date_worked)"))
-      ->get()
-      ->toArray()
     ;
+
+    if (!empty($employeeEmail) && (
+      $this->main->auth->userHasRole(User::TYPE_ADMINISTRATOR) ||
+      $this->main->auth->userHasRole(User::TYPE_CHIEF_OFFICER) ||
+      $this->main->auth->userHasRole(User::TYPE_MANAGER)
+    )) {
+      $mUser = new User($this->main);
+      $employee = $mUser->record->prepareReadQuery()
+        ->select($mUser->getFullTableSqlName().".id", "first_name", "last_name")
+        ->where("email", $employeeEmail)
+        ->first()
+        ->toArray()
+      ;
+
+      $usersWorktimes->where("id_worker", $employee["id"]);
+      $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
+    } else {
+      $usersWorktimes->where("id_worker", $this->main->auth->getUserId());
+    }
+
+    $usersWorktimes = $usersWorktimes->get()->toArray();
 
     foreach ($usersWorktimes as $workSummary) {
       $sortedMonths[$workSummary["month"]]["value"] = $workSummary["duration"];

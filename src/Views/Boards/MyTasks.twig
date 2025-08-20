@@ -9,6 +9,9 @@
     border: solid 1px lightgray;
   }
 </style>
+{% if viewParams.employee %}
+  <div style="text-align: center"><h2>Viewing tasks for: {{ viewParams.employee }}</h2></div>
+{% endif %}
 {% if viewParams.myTasks == null %}
   <p>No tasks were found</p>
 {% else %}

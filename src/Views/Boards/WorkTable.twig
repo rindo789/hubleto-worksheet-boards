@@ -1,3 +1,6 @@
+{% if viewParams.employee %}
+  <div style="text-align: center"><h2>Viewing work tables for: {{ viewParams.employee }}</h2></div>
+{% endif %}
 {% for year, months in viewParams.worksheet %}
   {% for month, days in months %}
     <div class="card m-1 mb-2">

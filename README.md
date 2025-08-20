@@ -22,6 +22,7 @@ These apps are required for the panels to work.
 
 | App                             |
 | ------------------------------- |
+| HubletoApp\Settings\Users       |
 | HubletoApp\Community\Worksheets |
 | HubletoApp\Community\Pipeline   |
 | HubletoApp\Community\Tasks      |
@@ -40,7 +41,7 @@ These apps are required for the panels to work.
 
 ## Available panels
 
-Configuration of tables is done trough the form of the panel. By Hubleto standards, the configuration is done in a JSON format.
+Configuration of tables is done through the form of the panel. By Hubleto standards, the configuration is done in a JSON format.
 
 ### Quota for today
 
@@ -50,9 +51,10 @@ Shows many hours you have worked today and shows how many hours you still need t
 
 #### Configuration
 
-| Name  | Description               | Default value |
-| ----- | ------------------------- | ------------- |
-| quota | Your daily quota in hours | 8             |
+| Name          | Description                                                                                                                                                   | Default value |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| quota         | Your daily quota in hours                                                                                                                                     | 8             |
+| employeeEmail | By imputing an email of an employee, changes the panel to show information of another employee. Works only for administrator, manager and chief officer users | null          |
 
 ### Work Table
 
@@ -62,10 +64,11 @@ Shows a table summary of how many hours you have worked each day in a given rang
 
 #### Configuration
 
-| Name  | Description                                                 | Default value |
-| ----- | ----------------------------------------------------------- | ------------- |
-| quota | Your daily quota in hours                                   | 8             |
-| range | Number of days from today that should be shown in the table | 30            |
+| Name          | Description                                                                                                                                                   | Default value |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| quota         | Your daily quota in hours                                                                                                                                     | 8             |
+| range         | Number of days from today that should be shown in the table                                                                                                   | 30            |
+| employeeEmail | By imputing an email of an employee, changes the panel to show information of another employee. Works only for administrator, manager and chief officer users | null          |
 
 ### Hours by Month
 
@@ -75,7 +78,9 @@ Shows have many hours you have worked in each month in the current year
 
 #### Configuration
 
-This panel does not have any configurations.
+| Name          | Description                                                                                                                                                   | Default value |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| employeeEmail | By imputing an email of an employee, changes the panel to show information of another employee. Works only for administrator, manager and chief officer users | null          |
 
 ### My Tasks
 
@@ -85,4 +90,6 @@ Shows tasks that are assigned to you with a brief summary and a link to the task
 
 #### Configuration
 
-This panel does not have any configurations.
+| Name          | Description                                                                                                                                                   | Default value |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| employeeEmail | By imputing an email of an employee, changes the panel to show information of another employee. Works only for administrator, manager and chief officer users | null          |
