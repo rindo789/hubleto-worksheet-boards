@@ -1,45 +1,53 @@
 <?php
 
-namespace HubletoApp\External\Rindo789\WorksheetDashboard\Controllers\Boards;
+namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 
-use HubletoApp\Community\Settings\Models\User;
-use HubletoApp\Community\Worksheets\Models\Activity;
+use Hubleto\App\Community\Settings\Models\User;
+use Hubleto\App\Community\Worksheets\Models\Activity;
 
-class Quota extends \HubletoMain\Controller
+class Quota extends \Hubleto\Erp\Controller
 {
   public bool $hideDefaultDesktop = true;
 
   public function prepareView(): void
   {
     parent::prepareView();
-    $quota = $this->main->urlParamAsFloat("quota") > 0 ? $this->main->urlParamAsFloat("quota") : 8;
-    $employeeEmail = $this->main->urlParamAsString("employeeEmail") != "" ? $this->main->urlParamAsString("employeeEmail") : null;
+
+    $mTasks = $this->getService(Activity::class);
+    $mUser = $this->getService(User::class);
+
+    $quota = $this->getRouter()->urlParamAsFloat("quota") > 0 ? $this->getRouter()->urlParamAsFloat("quota") : 8;
+    $employeeEmail = $this->getRouter()->urlParamAsString("employeeEmail") != "" ? $this->getRouter()->urlParamAsString("employeeEmail") : null;
 
     $workedHours = 0.00;
 
-    $mTasks = new Activity($this->main);
     $usersWorktimes = $mTasks->record->prepareReadQuery()
       ->select("duration")
       ->where("date_worked", "=", date("Y-m-d"))
     ;
 
     if (!empty($employeeEmail) && (
-      $this->main->auth->userHasRole(User::TYPE_ADMINISTRATOR) ||
-      $this->main->auth->userHasRole(User::TYPE_CHIEF_OFFICER) ||
-      $this->main->auth->userHasRole(User::TYPE_MANAGER)
+      $this->getAuthProvider()->userHasRole(User::TYPE_ADMINISTRATOR) ||
+      $this->getAuthProvider()->userHasRole(User::TYPE_CHIEF_OFFICER) ||
+      $this->getAuthProvider()->userHasRole(User::TYPE_MANAGER)
     )) {
-      $mUser = new User($this->main);
       $employee = $mUser->record->prepareReadQuery()
         ->select($mUser->getFullTableSqlName().".id", "first_name", "last_name")
         ->where("email", $employeeEmail)
         ->first()
-        ->toArray()
+        ?->toArray()
       ;
 
-      $usersWorktimes->where("id_worker",$employee["id"]);
-      $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
+      if ($employee) {
+        $usersWorktimes->where("id_worker",$employee["id"]);
+        $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
+      } else {
+        $this->viewParams["employee"] = "N/A";
+        $usersWorktimes->where("id_worker", $this->getAuthProvider()->getUserId());
+      }
+
     } else {
-      $usersWorktimes->where("id_worker",$this->main->auth->getUserId());
+      $usersWorktimes->where("id_worker",$this->getAuthProvider()->getUserId());
     }
 
     $usersWorktimes = $usersWorktimes->get()->toArray();
@@ -48,11 +56,10 @@ class Quota extends \HubletoMain\Controller
       $workedHours += (float) $worktime["duration"];
     }
 
-
     $this->viewParams["quota"] = $quota;
     $this->viewParams["workedHours"] = $workedHours;
 
-    $this->setView('@HubletoApp:External:Rindo789:WorksheetDashboard/Boards/Quota.twig');
+    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/Quota.twig');
   }
 
 }

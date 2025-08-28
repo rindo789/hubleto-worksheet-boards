@@ -1,4 +1,4 @@
-namespace: HubletoApp\External\Rindo789\WorksheetDashboard
+namespace: Hubleto\App\External\Rindo789\WorksheetDashboard
 appType: external
 monthlyPricePerUser: 0
 sidebarGroup: custom
@@ -8,4 +8,4 @@ icon: fas fa-table-columns
 author:
   name: "Rindo789"
   company: "Rindo789"
-highlight: Worksheet dashboards for HubletoApp
+highlight: Worksheet dashboards for Hubleto

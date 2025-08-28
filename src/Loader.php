@@ -1,23 +1,23 @@
 <?php
 
-namespace HubletoApp\External\Rindo789\WorksheetDashboard;
+namespace Hubleto\App\External\Rindo789\WorksheetDashboard;
 
-class Loader extends \HubletoMain\App
+class Loader extends \Hubleto\Framework\App
 {
   public bool $permittedForAllUsers = true;
 
   public function init(): void
   {
     parent::init();
-    $this->main->router->httpGet([
+    $this->getRouter()->httpGet([
       '/^worksheet-dashboards\/?$/' => Controllers\Home::class,
       '/^worksheets\/boards\/quota\/?$/' => Controllers\Boards\Quota::class,
       '/^worksheets\/boards\/work-table\/?$/' => Controllers\Boards\WorkTable::class,
       '/^worksheets\/boards\/hours-by-month\/?$/' => Controllers\Boards\HoursByMonth::class,
       '/^worksheets\/boards\/my-tasks\/?$/' => Controllers\Boards\MyTasks::class,
     ]);
-
-    $dashboardsApp = $this->main->load(\HubletoApp\Community\Dashboards\Manager::class);
+    /** @var \Hubleto\App\Community\Dashboards\Manager $dashboardsApp */
+    $dashboardsApp = $this->getService(\Hubleto\App\Community\Dashboards\Manager::class);
     if ($dashboardsApp) {
       $dashboardsApp->addBoard(
         $this,

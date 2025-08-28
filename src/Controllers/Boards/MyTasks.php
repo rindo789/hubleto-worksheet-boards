@@ -1,77 +1,93 @@
 <?php
 
-namespace HubletoApp\External\Rindo789\WorksheetDashboard\Controllers\Boards;
+namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 
-use HubletoApp\Community\Tasks\Models\Task;
-use HubletoApp\Community\Worksheets\Models\Activity;
-use HubletoApp\Community\Pipeline\Models\PipelineStep;
-use HubletoApp\Community\Settings\Models\User;
+use Hubleto\App\Community\Tasks\Models\Task;
+use Hubleto\App\Community\Worksheets\Models\Activity;
+use Hubleto\App\Community\Pipeline\Models\PipelineStep;
+use Hubleto\App\Community\Settings\Models\User;
 
-class MyTasks extends \HubletoMain\Controller
+class MyTasks extends \Hubleto\Erp\Controller
 {
   public bool $hideDefaultDesktop = true;
 
   public function prepareView(): void
   {
+    parent::prepareView();
 
-    $mTasks = new Task($this->main);
-    $mPipelineSteps = new PipelineStep($this->main);
-    $mActivity = new Activity($this->main);
+    $mTasks = $this->getService(Task::class);
+    $mPipelineSteps = $this->getService(PipelineStep::class);
+    $mActivity = $this->getService(Activity::class);
+    $mUser = $this->getService(User::class);
 
-    $employeeEmail = $this->main->urlParamAsString("employeeEmail") != "" ? $this->main->urlParamAsString("employeeEmail") : null;
+    $employeeEmail = $this->getRouter()->urlParamAsString("employeeEmail") != "" ? $this->getRouter()->urlParamAsString("employeeEmail") : null;
 
     $myTasks = $mTasks->record->prepareReadQuery()
       ->select(
-        $mTasks->getFullTableSqlName().".id",
-        $mTasks->getFullTableSqlName().".identifier",
-        $mTasks->getFullTableSqlName().".title",
-        $mPipelineSteps->getFullTableSqlName().".name as step",
-        $mPipelineSteps->getFullTableSqlName().".color as color",
+        $mTasks->getFullTableSqlName() . ".id",
+        $mTasks->getFullTableSqlName() . ".identifier",
+        $mTasks->getFullTableSqlName() . ".title",
+        $mPipelineSteps->getFullTableSqlName() . ".name as step",
+        $mPipelineSteps->getFullTableSqlName() . ".color as color",
       )
-      ->selectRAW("(
+      ->selectRAW(
+        "(
           select sum(ifnull(duration, 0))
-          from ".$mActivity->getFullTableSqlName()."
+          from `". $mActivity->getFullTableSqlName(). "`
           where id_task = tasks.id
         ) as worked"
       )
-      ->where("is_closed",false)
+      ->where("is_closed", false)
       ->join(
         $mPipelineSteps->getFullTableSqlName(),
-        $mPipelineSteps->getFullTableSqlName().".id",
+        $mPipelineSteps->getFullTableSqlName() . ".id",
         "=",
-        $mTasks->getFullTableSqlName().".id_pipeline_step"
-      )
-    ;
+        $mTasks->getFullTableSqlName() . ".id_pipeline_step"
+      );
 
     if (!empty($employeeEmail) && (
-      $this->main->auth->userHasRole(User::TYPE_ADMINISTRATOR) ||
-      $this->main->auth->userHasRole(User::TYPE_CHIEF_OFFICER) ||
-      $this->main->auth->userHasRole(User::TYPE_MANAGER)
+      $this->getAuthProvider()->userHasRole(User::TYPE_ADMINISTRATOR) ||
+      $this->getAuthProvider()->userHasRole(User::TYPE_CHIEF_OFFICER) ||
+      $this->getAuthProvider()->userHasRole(User::TYPE_MANAGER)
     )) {
-      $mUser = new User($this->main);
       $employee = $mUser->record->prepareReadQuery()
-        ->select($mUser->getFullTableSqlName().".id", "first_name", "last_name")
+        ->select($mUser->getFullTableSqlName() . ".id", "first_name", "last_name")
         ->where("email", $employeeEmail)
         ->first()
-        ->toArray()
-      ;
+        ?->toArray();
 
-      $myTasks
-        ->where("id_developer",$employee["id"])
-        ->orWhere("id_tester",$employee["id"])
-      ;
-      $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
+      if ($employee) {
+        $myTasks->whereRaw(
+          "(
+            id_developer = ?
+            OR " . "id_tester = ?
+          )",
+          [$employee["id"], $employee["id"]]
+        );
+        $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
+      } else {
+        $this->viewParams["employee"] = "N/A";
+        $myTasks->whereRaw(
+          "(
+            id_developer = ?
+            OR " . "id_tester = ?
+          )",
+          [$this->getAuthProvider()->getUserId(), $this->getAuthProvider()->getUserId()]
+        );
+      }
     } else {
-      $myTasks
-        ->where("id_developer",$this->main->auth->getUserId())
-        ->orWhere("id_tester",$this->main->auth->getUserId())
-      ;
+      $myTasks->whereRaw(
+        "(
+          id_developer = ?
+          OR " . "id_tester = ?
+        )",
+        [$this->getAuthProvider()->getUserId(), $this->getAuthProvider()->getUserId()]
+      );
     }
 
     $myTasks = $myTasks->get()->toArray();
 
     $this->viewParams["myTasks"] = $myTasks;
-    $this->setView('@HubletoApp:External:Rindo789:WorksheetDashboard/Boards/MyTasks.twig');
+    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/MyTasks.twig');
   }
-
 }

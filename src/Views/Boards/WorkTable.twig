@@ -1,6 +1,13 @@
 {% if viewParams.employee %}
+  {% if viewParams.employee == "N/A" %}
+    <div class="text-center">
+      Employee could not be found. Defaulting to your data.
+    </div>
+  {% else %}
   <div style="text-align: center"><h2>Viewing work tables for: {{ viewParams.employee }}</h2></div>
+  {% endif %}
 {% endif %}
+
 {% for year, months in viewParams.worksheet %}
   {% for month, days in months %}
     <div class="card m-1 mb-2">
@@ -23,14 +30,18 @@
                     {% else %}
                       background-color: #4780bf;
                     {% endif %}
-                    color: white;"
-                  > {{ dayInfo.hours }} h</div>
+                    color: white;
+                    white-space: nowrap;
+                    overflow: hidden;"
+                  >{{ dayInfo.hours }} h</div>
                 {% endif %}
                 {% if ((dayInfo.hours / viewParams.quota) * 100) < 100 %}
                   <div class="px-1" style="
                     width: {{ 100 - ((dayInfo.hours / viewParams.quota) * 100) }}%;
                     background-color: #e5e5e5;
-                    color: black;"
+                    color: black;
+                    white-space: nowrap;
+                    overflow: hidden;"
                   >{{ viewParams.quota - dayInfo.hours }} h</div>
                 {% endif %}
                 </div>

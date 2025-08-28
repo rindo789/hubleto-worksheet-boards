@@ -9,9 +9,17 @@
     border: solid 1px lightgray;
   }
 </style>
-{% if viewParams.employee %}
-  <div style="text-align: center"><h2>Viewing tasks for: {{ viewParams.employee }}</h2></div>
+
+{% if viewParams.employee == "N/A" %}
+  <div class="text-center">
+    Employee could not be found. Defaulting to your data.
+  </div>
+{% else %}
+  <div class="text-center">
+<div style="text-align: center"><h2>Viewing tasks for: {{ viewParams.employee }}</h2></div>
+  </div>
 {% endif %}
+
 {% if viewParams.myTasks == null %}
   <p>No tasks were found</p>
 {% else %}

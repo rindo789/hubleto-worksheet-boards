@@ -1,12 +1,12 @@
 <?php
 
-namespace HubletoApp\External\Rindo789\WorksheetDashboard\Controllers\Boards;
+namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 
-use HubletoApp\Community\Settings\Models\User;
-use HubletoApp\Community\Worksheets\Models\Activity;
+use Hubleto\App\Community\Settings\Models\User;
+use Hubleto\App\Community\Worksheets\Models\Activity;
 use Illuminate\Database\Capsule\Manager as DB;
 
-class HoursByMonth extends \HubletoMain\Controller
+class HoursByMonth extends \Hubleto\Erp\Controller
 {
   public bool $hideDefaultDesktop = true;
 
@@ -14,7 +14,11 @@ class HoursByMonth extends \HubletoMain\Controller
   {
     parent::prepareView();
 
-    $employeeEmail = $this->main->urlParamAsString("employeeEmail") != "" ? $this->main->urlParamAsString("employeeEmail") : null;
+    $mTasks = $this->getService(Activity::class);
+    $mUser = $this->getService(User::class);
+
+    $employeeEmail = $this->getRouter()->urlParamAsString("employeeEmail") != "" ? $this->getRouter()->urlParamAsString("employeeEmail") : null;
+    $year = $this->getRouter()->urlParamAsInteger("year") > 0 ? $this->getRouter()->urlParamAsString("year") : date("Y");
 
     $sortedMonths = [
       1 => ["title" => "January", "value" => null],
@@ -31,30 +35,33 @@ class HoursByMonth extends \HubletoMain\Controller
       12 => ["title" => "December", "value" => null]
     ];
 
-    $mTasks = new Activity($this->main);
     $usersWorktimes = $mTasks->record->prepareReadQuery()
       ->select(DB::raw("MONTH(date_worked) as month"), DB::raw("SUM(duration) as duration"))
-      ->where(DB::raw("YEAR(date_worked)"), date("Y"))
+      ->where(DB::raw("YEAR(date_worked)"), $year)
       ->groupBy(DB::raw("MONTH(date_worked)"))
     ;
 
     if (!empty($employeeEmail) && (
-      $this->main->auth->userHasRole(User::TYPE_ADMINISTRATOR) ||
-      $this->main->auth->userHasRole(User::TYPE_CHIEF_OFFICER) ||
-      $this->main->auth->userHasRole(User::TYPE_MANAGER)
+      $this->getAuthProvider()->userHasRole(User::TYPE_ADMINISTRATOR) ||
+      $this->getAuthProvider()->userHasRole(User::TYPE_CHIEF_OFFICER) ||
+      $this->getAuthProvider()->userHasRole(User::TYPE_MANAGER)
     )) {
-      $mUser = new User($this->main);
       $employee = $mUser->record->prepareReadQuery()
         ->select($mUser->getFullTableSqlName().".id", "first_name", "last_name")
         ->where("email", $employeeEmail)
         ->first()
-        ->toArray()
+        ?->toArray()
       ;
 
-      $usersWorktimes->where("id_worker", $employee["id"]);
-      $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
+      if ($employee) {
+        $usersWorktimes->where("id_worker", $employee["id"]);
+        $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
+      } else {
+        $this->viewParams["employee"] = "N/A";
+        $usersWorktimes->where("id_worker", $this->getAuthProvider()->getUserId());
+      }
     } else {
-      $usersWorktimes->where("id_worker", $this->main->auth->getUserId());
+      $usersWorktimes->where("id_worker", $this->getAuthProvider()->getUserId());
     }
 
     $usersWorktimes = $usersWorktimes->get()->toArray();
@@ -64,7 +71,8 @@ class HoursByMonth extends \HubletoMain\Controller
     }
 
     $this->viewParams["sortedMonths"] = $sortedMonths;
-    $this->setView('@HubletoApp:External:Rindo789:WorksheetDashboard/Boards/HoursByMonth.twig');
+    $this->viewParams["year"] = $year;
+    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/HoursByMonth.twig');
   }
 
 }
