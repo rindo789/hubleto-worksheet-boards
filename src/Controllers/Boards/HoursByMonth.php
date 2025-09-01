@@ -36,7 +36,7 @@ class HoursByMonth extends \Hubleto\Erp\Controller
     ];
 
     $usersWorktimes = $mTasks->record->prepareReadQuery()
-      ->select(DB::raw("MONTH(date_worked) as month"), DB::raw("SUM(duration) as duration"))
+      ->select(DB::raw("MONTH(date_worked) as month"), DB::raw("SUM(worked_hours) as worked_hours"))
       ->where(DB::raw("YEAR(date_worked)"), $year)
       ->groupBy(DB::raw("MONTH(date_worked)"))
     ;
@@ -67,7 +67,7 @@ class HoursByMonth extends \Hubleto\Erp\Controller
     $usersWorktimes = $usersWorktimes->get()->toArray();
 
     foreach ($usersWorktimes as $workSummary) {
-      $sortedMonths[$workSummary["month"]]["value"] = $workSummary["duration"];
+      $sortedMonths[$workSummary["month"]]["value"] = $workSummary["worked_hours"];
     }
 
     $this->viewParams["sortedMonths"] = $sortedMonths;

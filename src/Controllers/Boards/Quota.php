@@ -22,7 +22,7 @@ class Quota extends \Hubleto\Erp\Controller
     $workedHours = 0.00;
 
     $usersWorktimes = $mTasks->record->prepareReadQuery()
-      ->select("duration")
+      ->select("worked_hours")
       ->where("date_worked", "=", date("Y-m-d"))
     ;
 
@@ -53,7 +53,7 @@ class Quota extends \Hubleto\Erp\Controller
     $usersWorktimes = $usersWorktimes->get()->toArray();
 
     foreach ($usersWorktimes as $worktime) {
-      $workedHours += (float) $worktime["duration"];
+      $workedHours += (float) $worktime["worked_hours"];
     }
 
     $this->viewParams["quota"] = $quota;

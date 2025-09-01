@@ -42,7 +42,7 @@ class WorkTable extends \Hubleto\Erp\Controller
     }
 
     $usersWorktimes = $mTasks->record->prepareReadQuery()
-      ->select("duration", "date_worked")
+      ->select("worked_hours", "date_worked")
       ->where("date_worked", ">=", $dateStart . " 00:00:00")
     ;
 
@@ -77,9 +77,9 @@ class WorkTable extends \Hubleto\Erp\Controller
       $date = date("Y-m-d", strtotime($workTime["date_worked"]));
 
       if (isset($sortedWorkDays[$year][$month][$date]["hours"])) {
-        $sortedWorkDays[$year][$month][$date]["hours"] += (float) $workTime["duration"];
+        $sortedWorkDays[$year][$month][$date]["hours"] += (float) $workTime["worked_hours"];
       } else {
-        $sortedWorkDays[$year][$month][$date]["hours"] = (float) $workTime["duration"];
+        $sortedWorkDays[$year][$month][$date]["hours"] = (float) $workTime["worked_hours"];
       }
     }
 

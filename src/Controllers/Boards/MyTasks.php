@@ -32,7 +32,7 @@ class MyTasks extends \Hubleto\Erp\Controller
       )
       ->selectRAW(
         "(
-          select sum(ifnull(duration, 0))
+          select sum(ifnull(worked_hours, 0))
           from `". $mActivity->getFullTableSqlName(). "`
           where id_task = tasks.id
         ) as worked"
