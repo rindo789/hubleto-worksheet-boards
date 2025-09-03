@@ -9,7 +9,7 @@ class Loader extends \Hubleto\Framework\App
   public function init(): void
   {
     parent::init();
-    $this->getRouter()->httpGet([
+    $this->router()->get([
       '/^worksheet-dashboards\/?$/' => Controllers\Home::class,
       '/^worksheets\/boards\/quota\/?$/' => Controllers\Boards\Quota::class,
       '/^worksheets\/boards\/work-table\/?$/' => Controllers\Boards\WorkTable::class,

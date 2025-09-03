@@ -19,7 +19,7 @@
         </tr>
         {% for day, dayInfo in days %}
           <tr {% if dayInfo.weekend == true %} style="background-color: #e5e5e5;" {% endif %}>
-            <td>{{ day|date("d. m. Y") }}</td>
+            <td class="px-1">{{ day|date("d. m. Y") }}</td>
             <td>
               <div class="flex">
                 {% if ((dayInfo.hours / viewParams.quota) * 100) > 0 %}

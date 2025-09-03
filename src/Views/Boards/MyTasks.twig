@@ -9,15 +9,16 @@
     border: solid 1px lightgray;
   }
 </style>
-
-{% if viewParams.employee == "N/A" %}
-  <div class="text-center">
-    Employee could not be found. Defaulting to your data.
-  </div>
-{% else %}
-  <div class="text-center">
-<div style="text-align: center"><h2>Viewing tasks for: {{ viewParams.employee }}</h2></div>
-  </div>
+{% if viewParams.employee %}
+  {% if viewParams.employee == "N/A" %}
+    <div class="text-center">
+      Employee could not be found. Defaulting to your data.
+    </div>
+  {% else %}
+    <div class="text-center">
+  <div style="text-align: center"><h2>Viewing tasks for: {{ viewParams.employee }}</h2></div>
+    </div>
+  {% endif %}
 {% endif %}
 
 {% if viewParams.myTasks == null %}
@@ -26,6 +27,7 @@
   <table id="my-task-table" class="hubleto component table">
     <tr>
       <th>Identifier</th>
+      <th>Related to</th>
       <th>Task</th>
       <th>Hours</th>
       <th>Step</th>
@@ -34,6 +36,7 @@
     {% for task in viewParams.myTasks %}
       <tr>
         <td>{{ task.identifier }}</td>
+        <td style="max-width: 220px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ task.related_to }}</td>
         <td style="max-width: 220px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ task.title }}</td>
         <td>{{ task.worked ?? 0 }} h</td>
         <td><div style="border-left: 10px solid {{task.color}}; padding-left:5px;">{{ task.step }}</div></td>

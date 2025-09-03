@@ -15,12 +15,14 @@ class MyTasks extends \Hubleto\Erp\Controller
   {
     parent::prepareView();
 
-    $mTasks = $this->getService(Task::class);
-    $mPipelineSteps = $this->getService(PipelineStep::class);
-    $mActivity = $this->getService(Activity::class);
-    $mUser = $this->getService(User::class);
+    $authProvider = $this->authProvider();
 
-    $employeeEmail = $this->getRouter()->urlParamAsString("employeeEmail") != "" ? $this->getRouter()->urlParamAsString("employeeEmail") : null;
+    $mTasks = $this->getModel(Task::class);
+    $mPipelineSteps = $this->getModel(PipelineStep::class);
+    $mActivity = $this->getModel(Activity::class);
+    $mUser = $this->getModel(User::class);
+
+    $employeeEmail = $this->router()->urlParamAsString("employeeEmail") != "" ? $this->router()->urlParamAsString("employeeEmail") : null;
 
     $myTasks = $mTasks->record->prepareReadQuery()
       ->select(
@@ -30,13 +32,31 @@ class MyTasks extends \Hubleto\Erp\Controller
         $mPipelineSteps->getFullTableSqlName() . ".name as step",
         $mPipelineSteps->getFullTableSqlName() . ".color as color",
       )
-      ->selectRAW(
-        "(
+      ->selectRAW("
+        (
           select sum(ifnull(worked_hours, 0))
           from `". $mActivity->getFullTableSqlName(). "`
           where id_task = tasks.id
-        ) as worked"
-      )
+        ) as worked,
+        (
+          select
+            concat(
+              ifnull(group_concat(concat('D:', deals.identifier) separator ', '), ''),
+              ifnull(group_concat(concat('P:', projects.identifier) separator ', '), '')
+            )
+          from tasks t2
+          left join deals_tasks on deals_tasks.id_task = t2.id
+          left join projects_tasks on projects_tasks.id_task = t2.id
+          left join deals on deals.id = deals_tasks.id_deal
+          left join projects on projects.id = projects_tasks.id_project
+          where
+            t2.id = tasks.id
+            and (
+              deals_tasks.id_task = tasks.id
+              or projects_tasks.id_task = tasks.id
+            )
+        ) as related_to
+      ")
       ->where("is_closed", false)
       ->join(
         $mPipelineSteps->getFullTableSqlName(),
@@ -46,9 +66,9 @@ class MyTasks extends \Hubleto\Erp\Controller
       );
 
     if (!empty($employeeEmail) && (
-      $this->getAuthProvider()->userHasRole(User::TYPE_ADMINISTRATOR) ||
-      $this->getAuthProvider()->userHasRole(User::TYPE_CHIEF_OFFICER) ||
-      $this->getAuthProvider()->userHasRole(User::TYPE_MANAGER)
+      $authProvider->userHasRole(User::TYPE_ADMINISTRATOR) ||
+      $authProvider->userHasRole(User::TYPE_CHIEF_OFFICER) ||
+      $authProvider->userHasRole(User::TYPE_MANAGER)
     )) {
       $employee = $mUser->record->prepareReadQuery()
         ->select($mUser->getFullTableSqlName() . ".id", "first_name", "last_name")
@@ -72,7 +92,7 @@ class MyTasks extends \Hubleto\Erp\Controller
             id_developer = ?
             OR " . "id_tester = ?
           )",
-          [$this->getAuthProvider()->getUserId(), $this->getAuthProvider()->getUserId()]
+          [$authProvider->getUserId(), $authProvider->getUserId()]
         );
       }
     } else {
@@ -81,7 +101,7 @@ class MyTasks extends \Hubleto\Erp\Controller
           id_developer = ?
           OR " . "id_tester = ?
         )",
-        [$this->getAuthProvider()->getUserId(), $this->getAuthProvider()->getUserId()]
+        [$authProvider->getUserId(), $authProvider->getUserId()]
       );
     }
 

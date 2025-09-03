@@ -14,11 +14,13 @@ class HoursByMonth extends \Hubleto\Erp\Controller
   {
     parent::prepareView();
 
-    $mTasks = $this->getService(Activity::class);
-    $mUser = $this->getService(User::class);
+    $authProvider = $this->authProvider();
 
-    $employeeEmail = $this->getRouter()->urlParamAsString("employeeEmail") != "" ? $this->getRouter()->urlParamAsString("employeeEmail") : null;
-    $year = $this->getRouter()->urlParamAsInteger("year") > 0 ? $this->getRouter()->urlParamAsString("year") : date("Y");
+    $mTasks = $this->getModel(Activity::class);
+    $mUser = $this->getModel(User::class);
+
+    $employeeEmail = $this->router()->urlParamAsString("employeeEmail") != "" ? $this->router()->urlParamAsString("employeeEmail") : null;
+    $year = $this->router()->urlParamAsInteger("year") > 0 ? $this->router()->urlParamAsString("year") : date("Y");
 
     $sortedMonths = [
       1 => ["title" => "January", "value" => null],
@@ -42,9 +44,9 @@ class HoursByMonth extends \Hubleto\Erp\Controller
     ;
 
     if (!empty($employeeEmail) && (
-      $this->getAuthProvider()->userHasRole(User::TYPE_ADMINISTRATOR) ||
-      $this->getAuthProvider()->userHasRole(User::TYPE_CHIEF_OFFICER) ||
-      $this->getAuthProvider()->userHasRole(User::TYPE_MANAGER)
+      $authProvider->userHasRole(User::TYPE_ADMINISTRATOR) ||
+      $authProvider->userHasRole(User::TYPE_CHIEF_OFFICER) ||
+      $authProvider->userHasRole(User::TYPE_MANAGER)
     )) {
       $employee = $mUser->record->prepareReadQuery()
         ->select($mUser->getFullTableSqlName().".id", "first_name", "last_name")
@@ -58,10 +60,10 @@ class HoursByMonth extends \Hubleto\Erp\Controller
         $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
       } else {
         $this->viewParams["employee"] = "N/A";
-        $usersWorktimes->where("id_worker", $this->getAuthProvider()->getUserId());
+        $usersWorktimes->where("id_worker", $authProvider->getUserId());
       }
     } else {
-      $usersWorktimes->where("id_worker", $this->getAuthProvider()->getUserId());
+      $usersWorktimes->where("id_worker", $authProvider->getUserId());
     }
 
     $usersWorktimes = $usersWorktimes->get()->toArray();

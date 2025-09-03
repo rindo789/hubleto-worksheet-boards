@@ -13,11 +13,13 @@ class Quota extends \Hubleto\Erp\Controller
   {
     parent::prepareView();
 
-    $mTasks = $this->getService(Activity::class);
-    $mUser = $this->getService(User::class);
+    $authProvider = $this->authProvider();
 
-    $quota = $this->getRouter()->urlParamAsFloat("quota") > 0 ? $this->getRouter()->urlParamAsFloat("quota") : 8;
-    $employeeEmail = $this->getRouter()->urlParamAsString("employeeEmail") != "" ? $this->getRouter()->urlParamAsString("employeeEmail") : null;
+    $mTasks = $this->getModel(Activity::class);
+    $mUser = $this->getModel(User::class);
+
+    $quota = $this->router()->urlParamAsFloat("quota") > 0 ? $this->router()->urlParamAsFloat("quota") : 8;
+    $employeeEmail = $this->router()->urlParamAsString("employeeEmail") != "" ? $this->router()->urlParamAsString("employeeEmail") : null;
 
     $workedHours = 0.00;
 
@@ -27,9 +29,9 @@ class Quota extends \Hubleto\Erp\Controller
     ;
 
     if (!empty($employeeEmail) && (
-      $this->getAuthProvider()->userHasRole(User::TYPE_ADMINISTRATOR) ||
-      $this->getAuthProvider()->userHasRole(User::TYPE_CHIEF_OFFICER) ||
-      $this->getAuthProvider()->userHasRole(User::TYPE_MANAGER)
+      $authProvider->userHasRole(User::TYPE_ADMINISTRATOR) ||
+      $authProvider->userHasRole(User::TYPE_CHIEF_OFFICER) ||
+      $authProvider->userHasRole(User::TYPE_MANAGER)
     )) {
       $employee = $mUser->record->prepareReadQuery()
         ->select($mUser->getFullTableSqlName().".id", "first_name", "last_name")
@@ -43,11 +45,11 @@ class Quota extends \Hubleto\Erp\Controller
         $this->viewParams["employee"] = $employee["first_name"] . " " . $employee["last_name"];
       } else {
         $this->viewParams["employee"] = "N/A";
-        $usersWorktimes->where("id_worker", $this->getAuthProvider()->getUserId());
+        $usersWorktimes->where("id_worker", $authProvider->getUserId());
       }
 
     } else {
-      $usersWorktimes->where("id_worker",$this->getAuthProvider()->getUserId());
+      $usersWorktimes->where("id_worker",$authProvider->getUserId());
     }
 
     $usersWorktimes = $usersWorktimes->get()->toArray();
