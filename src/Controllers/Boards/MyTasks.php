@@ -4,7 +4,7 @@ namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 
 use Hubleto\App\Community\Tasks\Models\Task;
 use Hubleto\App\Community\Worksheets\Models\Activity;
-use Hubleto\App\Community\Pipeline\Models\PipelineStep;
+use Hubleto\App\Community\Workflow\Models\WorkflowStep;
 use Hubleto\App\Community\Settings\Models\User;
 
 class MyTasks extends \Hubleto\Erp\Controller
@@ -18,7 +18,7 @@ class MyTasks extends \Hubleto\Erp\Controller
     $authProvider = $this->authProvider();
 
     $mTasks = $this->getModel(Task::class);
-    $mPipelineSteps = $this->getModel(PipelineStep::class);
+    $mWorkflowSteps = $this->getModel(WorkflowStep::class);
     $mActivity = $this->getModel(Activity::class);
     $mUser = $this->getModel(User::class);
 
@@ -29,8 +29,8 @@ class MyTasks extends \Hubleto\Erp\Controller
         $mTasks->getFullTableSqlName() . ".id",
         $mTasks->getFullTableSqlName() . ".identifier",
         $mTasks->getFullTableSqlName() . ".title",
-        $mPipelineSteps->getFullTableSqlName() . ".name as step",
-        $mPipelineSteps->getFullTableSqlName() . ".color as color",
+        $mWorkflowSteps->getFullTableSqlName() . ".name as step",
+        $mWorkflowSteps->getFullTableSqlName() . ".color as color",
       )
       ->selectRAW("
         (
@@ -59,10 +59,10 @@ class MyTasks extends \Hubleto\Erp\Controller
       ")
       ->where("is_closed", false)
       ->join(
-        $mPipelineSteps->getFullTableSqlName(),
-        $mPipelineSteps->getFullTableSqlName() . ".id",
+        $mWorkflowSteps->getFullTableSqlName(),
+        $mWorkflowSteps->getFullTableSqlName() . ".id",
         "=",
-        $mTasks->getFullTableSqlName() . ".id_pipeline_step"
+        $mTasks->getFullTableSqlName() . ".id_workflow_step"
       );
 
     if (!empty($employeeEmail) && (

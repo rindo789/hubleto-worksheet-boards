@@ -28,7 +28,7 @@ These apps are required for the panels to work.
 | -------------------------------- |
 | Hubleto\App\Settings\Users       |
 | Hubleto\App\Community\Worksheets |
-| Hubleto\App\Community\Pipeline   |
+| Hubleto\App\Community\Workflow   |
 | Hubleto\App\Community\Tasks      |
 
 ## Installation
