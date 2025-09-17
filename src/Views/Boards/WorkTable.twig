@@ -10,9 +10,9 @@
 
 {% for year, months in viewParams.worksheet %}
   {% for month, days in months %}
-    <div class="card m-1 mb-2">
+    <div class="mb-2 overflow-hidden" style="border-style: solid; border-width: 1px; border-color: var(--color-slate-200); border-radius: 4px;">
       <h2 class="p-2">{{ month ~ " " ~ year }}</h2>
-      <table class="hubleto component table" style="min-width: 500px;">
+      <table id="work-table" class="hubleto component table">
         <tr>
           <th style="width: 100px;">Date</th>
           <th>Worked Hours</th>

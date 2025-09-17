@@ -13,7 +13,7 @@
 <h2 class="text-center">{{ viewParams.year }}</h2>
 <div class="grid grid-cols-2 gap-2">
 {% for months in viewParams.sortedMonths %}
-  <div class="card p-1">
+  <div class="card p-1 truncate">
     <h2>{{ months.title }}</h2>
     <p>{{ months.value ?? 0 }} h</p>
   </div>

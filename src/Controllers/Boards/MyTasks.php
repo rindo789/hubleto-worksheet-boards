@@ -37,6 +37,7 @@ class MyTasks extends \Hubleto\Erp\Controller
           select sum(ifnull(worked_hours, 0))
           from `". $mActivity->getFullTableSqlName(). "`
           where id_task = tasks.id
+            and id_worker = ?
         ) as worked,
         (
           select
@@ -56,7 +57,7 @@ class MyTasks extends \Hubleto\Erp\Controller
               or projects_tasks.id_task = tasks.id
             )
         ) as related_to
-      ")
+      ", [$authProvider->getUserId()])
       ->where("is_closed", false)
       ->join(
         $mWorkflowSteps->getFullTableSqlName(),
