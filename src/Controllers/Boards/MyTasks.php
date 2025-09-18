@@ -5,7 +5,7 @@ namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 use Hubleto\App\Community\Tasks\Models\Task;
 use Hubleto\App\Community\Worksheets\Models\Activity;
 use Hubleto\App\Community\Workflow\Models\WorkflowStep;
-use Hubleto\App\Community\Settings\Models\User;
+use Hubleto\App\Community\Auth\Models\User;
 
 class MyTasks extends \Hubleto\Erp\Controller
 {

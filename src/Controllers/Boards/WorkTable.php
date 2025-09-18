@@ -2,7 +2,7 @@
 
 namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 
-use Hubleto\App\Community\Settings\Models\User;
+use Hubleto\App\Community\Auth\Models\User;
 use Hubleto\App\Community\Worksheets\Models\Activity;
 
 class WorkTable extends \Hubleto\Erp\Controller
