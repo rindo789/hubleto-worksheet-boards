@@ -4,7 +4,7 @@
     "description": "Worksheet dashboards for Hubleto",
     "autoload": {
         "psr-4": {
-            "Hubleto\\App\\External\\Rindo789\\WorksheetDashboard\\": "src"
+            "Hubleto\\App\\External\\WorksheetDashboard\\": "src"
         }
     },
     "minimum-stability": "stable",

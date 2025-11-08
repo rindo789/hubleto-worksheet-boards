@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\Rindo789\WorksheetDashboard;
+namespace Hubleto\App\External\WorksheetDashboard;
 
 class Loader extends \Hubleto\Framework\App
 {

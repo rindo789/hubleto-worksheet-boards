@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers;
+namespace Hubleto\App\External\WorksheetDashboard\Controllers;
 
 class Home extends \Hubleto\Erp\Controller
 {

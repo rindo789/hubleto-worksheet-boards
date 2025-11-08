@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
+namespace Hubleto\App\External\WorksheetDashboard\Controllers\Boards;
 
 use Hubleto\App\Community\Auth\Models\User;
 use Hubleto\App\Community\Worksheets\Models\Activity;
