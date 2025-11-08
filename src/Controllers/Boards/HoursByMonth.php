@@ -74,7 +74,7 @@ class HoursByMonth extends \Hubleto\Erp\Controller
 
     $this->viewParams["sortedMonths"] = $sortedMonths;
     $this->viewParams["year"] = $year;
-    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/HoursByMonth.twig');
+    $this->setView('@Hubleto:App:External:WorksheetDashboard/Boards/HoursByMonth.twig');
   }
 
 }

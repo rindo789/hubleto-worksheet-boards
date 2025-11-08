@@ -87,7 +87,7 @@ class WorkTable extends \Hubleto\Erp\Controller
 
     $this->viewParams["worksheet"] = $sortedWorkDays;
     $this->viewParams["quota"] = $quota;
-    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/WorkTable.twig');
+    $this->setView('@Hubleto:App:External:WorksheetDashboard/Boards/WorkTable.twig');
   }
 
 }

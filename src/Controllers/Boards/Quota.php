@@ -61,7 +61,7 @@ class Quota extends \Hubleto\Erp\Controller
     $this->viewParams["quota"] = $quota;
     $this->viewParams["workedHours"] = $workedHours;
 
-    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/Quota.twig');
+    $this->setView('@Hubleto:App:External:WorksheetDashboard/Boards/Quota.twig');
   }
 
 }

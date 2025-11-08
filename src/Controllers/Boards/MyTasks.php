@@ -109,6 +109,6 @@ class MyTasks extends \Hubleto\Erp\Controller
     $myTasks = $myTasks->get()->toArray();
 
     $this->viewParams["myTasks"] = $myTasks;
-    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/MyTasks.twig');
+    $this->setView('@Hubleto:App:External:WorksheetDashboard/Boards/MyTasks.twig');
   }
 }
