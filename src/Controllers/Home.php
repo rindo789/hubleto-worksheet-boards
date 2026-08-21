@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\WorksheetDashboard\Controllers;
+namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers;
 
 class Home extends \Hubleto\Erp\Controller
 {
@@ -14,7 +14,7 @@ class Home extends \Hubleto\Erp\Controller
   public function prepareView(): void
   {
     parent::prepareView();
-    $this->setView('@Hubleto:App:External:WorksheetDashboard/Home.twig');
+    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Home.twig');
   }
 
 }

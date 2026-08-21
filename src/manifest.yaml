@@ -1,4 +1,4 @@
-namespace: Hubleto\App\External\WorksheetDashboard
+namespace: Hubleto\App\External\Rindo789\WorksheetDashboard
 appType: external
 monthlyPricePerUser: 0
 sidebarGroup: custom
@@ -9,3 +9,11 @@ author:
   name: "Rindo789"
   company: "Rindo789"
 highlight: Worksheet dashboards for Hubleto
+requires:
+  Hubleto\App\Community\Auth
+  Hubleto\App\Community\Leads
+  Hubleto\App\Community\Deals
+  Hubleto\App\Community\Projects
+  Hubleto\App\Community\Tasks
+  Hubleto\App\Community\Workflow
+  Hubleto\App\Community\Worksheets

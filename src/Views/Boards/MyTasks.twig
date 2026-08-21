@@ -1,9 +1,8 @@
-
 <style>
   #my-task-table {
     border: solid 1px lightgray;
     border-collapse: collapse;
-    table-layout: fixed;
+    /* table-layout: fixed; */
   }
 
   #my-task-table td,
@@ -58,20 +57,20 @@
         <th>Identifier</th>
         <th>Related to</th>
         <th>Task</th>
-        <th>Hours</th>
+        <th>My hours</th>
         <th>Step</th>
         <th></th>
       </tr>
       {% for task in viewParams.myTasks %}
       <tr>
         <td>{{ task.identifier }}</td>
-        <td>{{ task.related_to }}</td>
+        <td>{{ task.related_to ?? "-" }}</td>
         <td>{{ task.title }}</td>
         <td>{{ task.worked ?? 0 }} h</td>
         <td>
           <div style="border-left: 10px solid {{task.color}}; padding-left:5px;">{{ task.step }}</div>
         </td>
-        <td><a class="btn p-1 btn-main w-full" target="_blank" href="{{ config.projectUrl }}/tasks/{{ task.id }}">Go to task</a>
+        <td><a class="btn p-1 btn-main w-full block whitespace-nowrap" target="_blank" href="{{ config.projectUrl }}/tasks/{{ task.id }}"><span class="text-center">Go to task</span></a>
         </td>
       </tr>
       {% endfor %}

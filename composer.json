@@ -4,12 +4,12 @@
     "description": "Worksheet dashboards for Hubleto",
     "autoload": {
         "psr-4": {
-            "Hubleto\\App\\External\\WorksheetDashboard\\": "src"
+            "Hubleto\\App\\External\\Rindo789\\WorksheetDashboard\\": "src"
         }
     },
     "minimum-stability": "stable",
     "require-dev": {
-        "hubleto/erp": "dev-main",
-        "hubleto/framework": "dev-main"
+        "hubleto/framework": "1.1.0",
+        "hubleto/erp": "1.1.3"
     }
 }

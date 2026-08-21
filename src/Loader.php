@@ -1,8 +1,10 @@
 <?php
 
-namespace Hubleto\App\External\WorksheetDashboard;
+namespace Hubleto\App\External\Rindo789\WorksheetDashboard;
 
-class Loader extends \Hubleto\Framework\App
+use Hubleto\Erp\App;
+
+class Loader extends App
 {
   public bool $permittedForAllUsers = true;
 
@@ -11,10 +13,12 @@ class Loader extends \Hubleto\Framework\App
     parent::init();
     $this->router()->get([
       '/^worksheet-dashboards\/?$/' => Controllers\Home::class,
-      '/^worksheets\/boards\/quota\/?$/' => Controllers\Boards\Quota::class,
-      '/^worksheets\/boards\/work-table\/?$/' => Controllers\Boards\WorkTable::class,
-      '/^worksheets\/boards\/hours-by-month\/?$/' => Controllers\Boards\HoursByMonth::class,
-      '/^worksheets\/boards\/my-tasks\/?$/' => Controllers\Boards\MyTasks::class,
+      '/^worksheets-dashboards\/boards\/quota\/?$/' => Controllers\Boards\Quota::class,
+      '/^worksheets-dashboards\/boards\/work-table\/?$/' => Controllers\Boards\WorkTable::class,
+      '/^worksheets-dashboards\/boards\/hours-by-month\/?$/' => Controllers\Boards\HoursByMonth::class,
+      '/^worksheets-dashboards\/boards\/my-tasks\/?$/' => Controllers\Boards\MyTasks::class,
+      '/^worksheets-dashboards\/boards\/pinned-tasks\/?$/' => Controllers\Boards\PinnedTask::class,
+      '/^worksheets-dashboards\/boards\/latest-tasks\/?$/' => Controllers\Boards\LatestWorkedTasks::class,
     ]);
     /** @var \Hubleto\App\Community\Dashboards\Manager $dashboardsApp */
     $dashboardsApp = $this->getService(\Hubleto\App\Community\Dashboards\Manager::class);
@@ -22,22 +26,32 @@ class Loader extends \Hubleto\Framework\App
       $dashboardsApp->addBoard(
         $this,
         $this->translate('Quota for today'),
-        'worksheets/boards/quota'
+        'worksheets-dashboards/boards/quota'
       );
       $dashboardsApp->addBoard(
         $this,
         $this->translate('Work Table'),
-        'worksheets/boards/work-table'
+        'worksheets-dashboards/boards/work-table'
       );
       $dashboardsApp->addBoard(
         $this,
         $this->translate('Hours by Month'),
-        'worksheets/boards/hours-by-month'
+        'worksheets-dashboards/boards/hours-by-month'
       );
       $dashboardsApp->addBoard(
         $this,
         $this->translate('My Tasks'),
-        'worksheets/boards/my-tasks'
+        'worksheets-dashboards/boards/my-tasks'
+      );
+      $dashboardsApp->addBoard(
+        $this,
+        $this->translate('Pinned tasks'),
+        'worksheets-dashboards/boards/pinned-tasks'
+      );
+      $dashboardsApp->addBoard(
+        $this,
+        $this->translate('Latest worked on tasks'),
+        'worksheets-dashboards/boards/latest-tasks'
       );
     }
   }

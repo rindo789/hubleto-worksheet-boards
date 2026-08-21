@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\WorksheetDashboard\Controllers\Boards;
+namespace Hubleto\App\External\Rindo789\WorksheetDashboard\Controllers\Boards;
 
 use Hubleto\App\Community\Auth\Models\User;
 use Hubleto\App\Community\Worksheets\Models\Activity;
@@ -61,7 +61,7 @@ class Quota extends \Hubleto\Erp\Controller
     $this->viewParams["quota"] = $quota;
     $this->viewParams["workedHours"] = $workedHours;
 
-    $this->setView('@Hubleto:App:External:WorksheetDashboard/Boards/Quota.twig');
+    $this->setView('@Hubleto:App:External:Rindo789:WorksheetDashboard/Boards/Quota.twig');
   }
 
 }

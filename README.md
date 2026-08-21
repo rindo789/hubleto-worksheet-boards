@@ -19,17 +19,26 @@ It adds multiple new panels to the Dashboard app to choose from.
     - [My Tasks](#my-tasks)
       - [Configuration](#configuration-3)
       - [Example configuration](#example-configuration-3)
+    - [Pinned Tasks](#pinned-tasks)
+      - [Configuration](#configuration-4)
+      - [Example configuration](#example-configuration-4)
+    - [Latest worked on tasks](#latest-worked-on-tasks)
+      - [Configuration](#configuration-5)
+      - [Example configuration](#example-configuration-5)
 
 ## Required apps
 
-These apps are required for the panels to work.
+These apps are required to be installed for the panels to work.
 
 | App                              |
 | -------------------------------- |
-| Hubleto\App\Settings\Users       |
-| Hubleto\App\Community\Worksheets |
-| Hubleto\App\Community\Workflow   |
+| Hubleto\App\Settings\Auth       |
+| Hubleto\App\Community\Leads |
+| Hubleto\App\Community\Deals   |
+| Hubleto\App\Community\Projects      |
 | Hubleto\App\Community\Tasks      |
+| Hubleto\App\Community\Workflow      |
+| Hubleto\App\Community\Worksheets   |
 
 ## Installation
 
@@ -40,12 +49,12 @@ These apps are required for the panels to work.
 2. In Hubleto Maintenance > Settings > Manage apps search for "Worksheet".
 
 
-   ![alt text](readme/install.png)
+   ![Install example](readme/install.png)
 
 3. Click "Install" in the "Worksheet Dashboards" app.
 
 
-   ![alt text](readme/search.png)
+   ![Search example](readme/search.png)
 
 4. Installation done! Now you can add the new panels in your dashboard.
 
@@ -94,7 +103,7 @@ Shows a table summary of how many hours you have worked each day in a given rang
 ```json
 {
   "quota": 8,
-  "quota": 60,
+  "range": 60,
   "employeeEmail": "dev@hubleto.com"
 }
 ```
@@ -138,5 +147,45 @@ Shows tasks that are assigned to you with a brief summary and a link to the task
 ```json
 {
   "employeeEmail": "dev@hubleto.com"
+}
+```
+
+### Pinned Tasks
+
+Allows you to pin specified tasks to be shown on the dashboard
+
+![Pinned tasks panel](readme/image-4.png)
+
+#### Configuration
+
+| Name          | Description                                                                                                                                                   | Default value |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| pinnedTasks | An array of task IDs | null          |
+
+#### Example configuration
+
+```json
+{
+  "pinnedTasks": [1,2,3]
+}
+```
+### Latest worked on tasks
+
+Shows you tasks that you worked on recently
+
+
+![Latest worked on tasks panel](readme/image-5.png)
+
+#### Configuration
+
+| Name          | Description                                                                                                                                                   | Default value |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| numberOfTasks | The number of latest tasks | 10          |
+
+#### Example configuration
+
+```json
+{
+  "numberOfTasks": 5
 }
 ```
